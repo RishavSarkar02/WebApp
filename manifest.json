@@ -1,0 +1,8 @@
+{
+  "name": "ESP8266 IoT Dashboard",
+  "short_name": "IoT Dashboard",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#00c853"
+}
