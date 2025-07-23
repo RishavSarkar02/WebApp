@@ -1,24 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>ESP8266 IoT Dashboard</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IoT Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div class="container">
-    <h1>IoT Dashboard</h1>
-    <div class="card">🌡 Temperature: <span id="temp">--</span>°C</div>
-    <div class="card">💧 Humidity: <span id="hum">--</span>%</div>
-    <div class="card">🌱 Soil Moisture: <span id="soil">--</span>%</div>
-    <div class="card">
-      <button onclick="toggleMotor()">Toggle Motor</button>
-      <div>Motor: <span id="motor">--</span></div>
+  <div class="dashboard">
+    <h1>🌐 ESP8266 IoT</h1>
+    <div class="cards">
+      <div class="card glass">
+        <p>🌡 Temperature</p>
+        <h2 id="temp">-- °C</h2>
+      </div>
+      <div class="card glass">
+        <p>💧 Humidity</p>
+        <h2 id="hum">-- %</h2>
+      </div>
+      <div class="card glass">
+        <p>🌱 Soil Moisture</p>
+        <h2 id="soil">-- %</h2>
+      </div>
+      <div class="card glass motor">
+        <p>⚙️ Motor</p>
+        <label class="switch">
+          <input type="checkbox" id="motorSwitch" onchange="toggleMotor()" />
+          <span class="slider round"></span>
+        </label>
+        <div class="status">State: <span id="motor">--</span></div>
+      </div>
     </div>
-    <canvas id="chart" width="300" height="150"></canvas>
+    <div class="chart-container glass">
+      <canvas id="chart"></canvas>
+    </div>
   </div>
   <script src="script.js"></script>
 </body>
