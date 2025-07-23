@@ -1,32 +1,43 @@
-let chartData = { labels: [], temp: [], hum: [], soil: [] };
+let chartData = {
+  labels: [],
+  temp: [],
+  hum: [],
+  soil: []
+};
 let chart;
 
 async function fetchData() {
-  const res = await fetch("http://<your_esp8266_ip>/data");
-  const data = await res.json();
-  document.getElementById("temp").textContent = data.temp;
-  document.getElementById("hum").textContent = data.hum;
-  document.getElementById("soil").textContent = data.soil;
-  document.getElementById("motor").textContent = data.motor ? "ON" : "OFF";
+  try {
+    const res = await fetch("http://<your_esp_ip>/data");
+    const data = await res.json();
 
-  const time = new Date().toLocaleTimeString();
-  chartData.labels.push(time);
-  chartData.temp.push(data.temp);
-  chartData.hum.push(data.hum);
-  chartData.soil.push(data.soil);
+    document.getElementById("temp").textContent = `${data.temp} °C`;
+    document.getElementById("hum").textContent = `${data.hum} %`;
+    document.getElementById("soil").textContent = `${data.soil} %`;
+    document.getElementById("motor").textContent = data.motor ? "ON" : "OFF";
+    document.getElementById("motorSwitch").checked = data.motor;
 
-  if (chartData.labels.length > 10) {
-    chartData.labels.shift();
-    chartData.temp.shift();
-    chartData.hum.shift();
-    chartData.soil.shift();
+    const time = new Date().toLocaleTimeString();
+    chartData.labels.push(time);
+    chartData.temp.push(data.temp);
+    chartData.hum.push(data.hum);
+    chartData.soil.push(data.soil);
+
+    if (chartData.labels.length > 10) {
+      chartData.labels.shift();
+      chartData.temp.shift();
+      chartData.hum.shift();
+      chartData.soil.shift();
+    }
+
+    chart.update();
+  } catch (err) {
+    console.error("Data fetch failed:", err);
   }
-
-  chart.update();
 }
 
 function toggleMotor() {
-  fetch("http://<your_esp8266_ip>/toggle");
+  fetch("http://<your_esp_ip>/toggle");
 }
 
 window.onload = () => {
@@ -36,13 +47,23 @@ window.onload = () => {
     data: {
       labels: chartData.labels,
       datasets: [
-        { label: "Temp", data: chartData.temp, borderColor: "red" },
-        { label: "Humidity", data: chartData.hum, borderColor: "blue" },
-        { label: "Soil", data: chartData.soil, borderColor: "green" }
+        { label: "Temp (°C)", data: chartData.temp, borderColor: "red", fill: false },
+        { label: "Humidity (%)", data: chartData.hum, borderColor: "blue", fill: false },
+        { label: "Soil Moisture (%)", data: chartData.soil, borderColor: "lime", fill: false }
       ]
     },
-    options: { responsive: true, scales: { y: { beginAtZero: true } } }
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: { beginAtZero: true }
+      },
+      plugins: {
+        legend: { labels: { color: "#fff" } }
+      }
+    }
   });
 
+  fetchData();
   setInterval(fetchData, 3000);
 };
