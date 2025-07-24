@@ -1,112 +1,51 @@
-:root {
-  --primary: #00c853;
-  --bg: #0d0d0d;
-  --card-bg: rgba(255, 255, 255, 0.05);
-  --text: #fff;
-  --accent: #1de9b6;
-}
-
-* {
-  box-sizing: border-box;
-}
-
 body {
+  background: #121212;
+  color: #fff;
+  font-family: sans-serif;
   margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: var(--bg);
-  color: var(--text);
   display: flex;
   justify-content: center;
-  padding: 20px;
 }
-
 .dashboard {
   max-width: 800px;
   width: 100%;
+  padding: 20px;
   text-align: center;
 }
-
-h1 {
-  margin-bottom: 20px;
-  color: var(--accent);
-  font-weight: 600;
-}
-
 .cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 15px;
 }
-
 .card {
-  padding: 20px;
-  border-radius: 15px;
-  background: var(--card-bg);
-  box-shadow: 0 0 10px rgba(0, 200, 83, 0.1);
-  backdrop-filter: blur(5px);
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  padding: 15px;
 }
-
-.glass {
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-h2 {
-  font-size: 1.5rem;
-  margin-top: 10px;
-  color: var(--primary);
-}
-
-.chart-container {
-  margin-top: 30px;
-  padding: 10px;
-}
-
-.motor .status {
-  margin-top: 10px;
-  font-size: 0.9rem;
-}
-
-/* Toggle switch */
-.switch {
+.motor .switch {
   position: relative;
   display: inline-block;
-  width: 50px;
-  height: 26px;
+  width: 50px; height: 26px;
 }
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
+.switch input { opacity: 0; width: 0; height: 0; }
 .slider {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #555;
+  position: absolute; cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #555;
   border-radius: 30px;
-  transition: 0.4s;
+  transition: .4s;
 }
-
 .slider:before {
-  position: absolute;
-  content: "";
-  height: 20px;
-  width: 20px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  border-radius: 50%;
-  transition: 0.4s;
+  position: absolute; content: "";
+  height: 20px; width: 20px; border-radius: 50%;
+  background: white; transition: .4s;
+  bottom: 3px; left: 3px;
 }
-
 input:checked + .slider {
-  background-color: var(--primary);
+  background: #00c853;
 }
-
 input:checked + .slider:before {
   transform: translateX(24px);
 }
+.chart-container { margin-top: 30px; }
+canvas { background: rgba(255,255,255,0.05); border-radius: 10px; }
