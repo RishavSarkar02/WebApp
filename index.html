@@ -2,38 +2,38 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IoT Dashboard</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>ESP8266 IoT Dashboard</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="manifest" href="manifest.json" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 </head>
 <body>
   <div class="dashboard">
-    <h1>🌐 ESP8266 IoT</h1>
+    <h1>ESP8266 IoT Dashboard</h1>
     <div class="cards">
-      <div class="card glass">
+      <div class="card">
         <p>🌡 Temperature</p>
-        <h2 id="temp">-- °C</h2>
+        <h2 id="temp">--°C</h2>
       </div>
-      <div class="card glass">
+      <div class="card">
         <p>💧 Humidity</p>
-        <h2 id="hum">-- %</h2>
+        <h2 id="hum">--%</h2>
       </div>
-      <div class="card glass">
+      <div class="card">
         <p>🌱 Soil Moisture</p>
-        <h2 id="soil">-- %</h2>
+        <h2 id="soil">--%</h2>
       </div>
-      <div class="card glass motor">
+      <div class="card motor">
         <p>⚙️ Motor</p>
         <label class="switch">
           <input type="checkbox" id="motorSwitch" onchange="toggleMotor()" />
           <span class="slider round"></span>
         </label>
-        <div class="status">State: <span id="motor">--</span></div>
+        <p>State: <span id="motor">--</span></p>
       </div>
     </div>
-    <div class="chart-container glass">
+    <div class="chart-container">
       <canvas id="chart"></canvas>
     </div>
   </div>
