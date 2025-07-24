@@ -1,68 +1,37 @@
-let chartData = {
-  labels: [],
-  temp: [],
-  hum: [],
-  soil: []
+const options = {
+  connectTimeout: 4000,
+  clientId: "webapp_" + Math.random().toString(16).substr(2, 8)
 };
-let chart;
 
-async function fetchData() {
-  try {
-    const res = await fetch("http://<your_esp_ip>/data");
-    const data = await res.json();
+const client = mqtt.connect("wss://test.mosquitto.org:8081", options); // choose a WS broker
 
-    document.getElementById("temp").textContent = `${data.temp} °C`;
-    document.getElementById("hum").textContent = `${data.hum} %`;
-    document.getElementById("soil").textContent = `${data.soil} %`;
-    document.getElementById("motor").textContent = data.motor ? "ON" : "OFF";
-    document.getElementById("motorSwitch").checked = data.motor;
+client.on("connect", () => {
+  client.subscribe("esp8266/sensors/#");
+  client.subscribe("esp8266/actuators/motor");
+});
 
-    const time = new Date().toLocaleTimeString();
-    chartData.labels.push(time);
-    chartData.temp.push(data.temp);
-    chartData.hum.push(data.hum);
-    chartData.soil.push(data.soil);
-
-    if (chartData.labels.length > 10) {
-      chartData.labels.shift();
-      chartData.temp.shift();
-      chartData.hum.shift();
-      chartData.soil.shift();
-    }
-
-    chart.update();
-  } catch (err) {
-    console.error("Data fetch failed:", err);
+client.on("message", (topic, message) => {
+  const msg = message.toString();
+  if (topic === "esp8266/sensors/temperature") {
+    document.getElementById("temp").textContent = msg + " °C";
   }
-}
+  else if (topic === "esp8266/sensors/humidity") {
+    document.getElementById("hum").textContent = msg + " %";
+  }
+  else if (topic === "esp8266/sensors/soil") {
+    document.getElementById("soil").textContent = msg + " %";
+  }
+  else if (topic === "esp8266/actuators/motor") {
+    const state = (msg === "ON");
+    document.getElementById("motor").textContent = state ? "ON" : "OFF";
+    document.getElementById("motorSwitch").checked = state;
+  }
+});
 
 function toggleMotor() {
-  fetch("http://<your_esp_ip>/toggle");
+  const newState = document.getElementById("motorSwitch").checked ? "OFF" : "ON";
+  client.publish("esp8266/actuators/motor", newState);
 }
-
-window.onload = () => {
-  const ctx = document.getElementById("chart").getContext("2d");
-  chart = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: chartData.labels,
-      datasets: [
-        { label: "Temp (°C)", data: chartData.temp, borderColor: "red", fill: false },
-        { label: "Humidity (%)", data: chartData.hum, borderColor: "blue", fill: false },
-        { label: "Soil Moisture (%)", data: chartData.soil, borderColor: "lime", fill: false }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        y: { beginAtZero: true }
-      },
-      plugins: {
-        legend: { labels: { color: "#fff" } }
-      }
-    }
-  });
 
   fetchData();
   setInterval(fetchData, 3000);
